@@ -1,6 +1,7 @@
 import { useAuthStore } from "@/features/stores/authStore";
 import { Button, Divider, Input, Link } from "@nextui-org/react";
 import { IconBrandGoogle } from "@tabler/icons-react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Login() {
@@ -8,8 +9,10 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { actions: authActions } = useAuthStore();
+  const router = useRouter();
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setSubmitLoading(true);
     (async () => {
       try {
         await authActions.login(email, password);
@@ -20,6 +23,8 @@ export default function Login() {
           console.log("lol rip");
         }
       }
+      router.push("/");
+      setSubmitLoading(false);
     })();
   };
 
