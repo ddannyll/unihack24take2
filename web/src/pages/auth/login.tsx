@@ -1,11 +1,26 @@
+import { useAuthStore } from "@/features/stores/authStore";
 import { Button, Divider, Input, Link } from "@nextui-org/react";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import { useState } from "react";
 
 export default function Login() {
   const [submitLoading, setSubmitLoading] = useState(false);
-  const handleSubmit = () => {
-    console.log("yippe");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { actions: authActions } = useAuthStore();
+  const handleSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    (async () => {
+      try {
+        await authActions.login(email, password);
+      } catch {
+        try {
+          await authActions.register(email, password, password);
+        } catch {
+          console.log("lol rip");
+        }
+      }
+    })();
   };
 
   return (
@@ -17,8 +32,20 @@ export default function Login() {
         <h1 className="mb-unit-md text-4xl font-medium text-foreground-800">
           Sign in
         </h1>
-        <Input label="Email" type="email" isRequired />
-        <Input label="Password" type="password" isRequired />
+        <Input
+          label="Email"
+          type="email"
+          isRequired
+          value={email}
+          onValueChange={setEmail}
+        />
+        <Input
+          label="Password"
+          type="password"
+          isRequired
+          value={password}
+          onValueChange={setPassword}
+        />
 
         <Button
           color="primary"
