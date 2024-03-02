@@ -8,6 +8,7 @@ import type { RecordService } from "pocketbase";
 export enum Collections {
   Meetup = "meetup",
   Message = "message",
+  Notification = "notification",
   Tag = "tag",
   User = "user",
 }
@@ -49,6 +50,11 @@ export type MessageRecord = {
   timeStamp?: IsoDateString;
 };
 
+export type NotificationRecord = {
+  forUser?: RecordIdString;
+  message?: string;
+};
+
 export type TagRecord = {
   name: string;
   numSearching?: number;
@@ -66,7 +72,7 @@ export type UserRecord = {
   longitude?: number;
   meetups?: RecordIdString[];
   messages?: RecordIdString[];
-  name?: string;
+  notifications?: RecordIdString[];
   profilePicture?: string;
   searching?: boolean;
   selectedTags?: RecordIdString[];
@@ -77,6 +83,8 @@ export type MeetupResponse<Texpand = unknown> = Required<MeetupRecord> &
   BaseSystemFields<Texpand>;
 export type MessageResponse<Texpand = unknown> = Required<MessageRecord> &
   BaseSystemFields<Texpand>;
+export type NotificationResponse<Texpand = unknown> =
+  Required<NotificationRecord> & BaseSystemFields<Texpand>;
 export type TagResponse<Texpand = unknown> = Required<TagRecord> &
   BaseSystemFields<Texpand>;
 export type UserResponse<Texpand = unknown> = Required<UserRecord> &
@@ -87,6 +95,7 @@ export type UserResponse<Texpand = unknown> = Required<UserRecord> &
 export type CollectionRecords = {
   meetup: MeetupRecord;
   message: MessageRecord;
+  notification: NotificationRecord;
   tag: TagRecord;
   user: UserRecord;
 };
@@ -94,6 +103,7 @@ export type CollectionRecords = {
 export type CollectionResponses = {
   meetup: MeetupResponse;
   message: MessageResponse;
+  notification: NotificationResponse;
   tag: TagResponse;
   user: UserResponse;
 };
@@ -104,6 +114,7 @@ export type CollectionResponses = {
 export type TypedPocketBase = PocketBase & {
   collection(idOrName: "meetup"): RecordService<MeetupResponse>;
   collection(idOrName: "message"): RecordService<MessageResponse>;
+  collection(idOrName: "notification"): RecordService<NotificationResponse>;
   collection(idOrName: "tag"): RecordService<TagResponse>;
   collection(idOrName: "user"): RecordService<UserResponse>;
 };
