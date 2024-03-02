@@ -6,5 +6,18 @@ import { pb } from "@/features/pocketbase";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  return <div>hello world</div>;
+  return (
+    <>
+      <div>hello world</div>
+
+      {/* navigate to /matchroom */}
+      <button
+        onClick={() => {
+          window.location.href = "/matchroom";
+        }}
+      >
+        matchroom
+      </button>
+    </>
+  );
 }
