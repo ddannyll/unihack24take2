@@ -5,6 +5,7 @@ import { useShallow } from "zustand/react/shallow";
 
 type AuthStoreType = {
   loggedIn: boolean;
+  userId: RecordIdString | null;
 
   actions: {
     login: (email: string, password: string) => void;
@@ -16,15 +17,20 @@ type AuthStoreType = {
     logout: () => void;
   };
 };
-export const useAuthStore = create<AuthStoreType>()((set) => ({
+export const useAuthStore = create<AuthStoreType>()((set, get) => ({
   loggedIn: false,
+  userId: null,
+
   actions: {
     async login(email: string, password: string) {
-      await pb.collection("users").authWithPassword(email, password);
+      const user = await pb
+        .collection("users")
+        .authWithPassword(email, password);
+      set((_state) => ({ loggedIn: true, userId: user.record.id }));
     },
     async register(email: string, password: string, confirmPassword: string) {
       await pb.collection("users").create({ email, password, confirmPassword });
-      return await pb.collection("users").authWithPassword(email, password);
+      get().actions.login(email, password);
     },
     logout() {
       pb.authStore.clear();
