@@ -16,14 +16,15 @@ export default function Login() {
     (async () => {
       try {
         await authActions.login(email, password);
+        router.push("/");
       } catch {
         try {
           await authActions.register(email, password, password);
+          router.push("/");
         } catch {
           console.log("lol rip");
         }
       }
-      router.push("/");
       setSubmitLoading(false);
     })();
   };
